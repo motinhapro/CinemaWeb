@@ -11,7 +11,7 @@ export function Navbar() {
       <div className="container">
         <Link className="navbar-brand" to="/">
           <i className="bi bi-film me-2"></i>
-          CineWeb Admin
+          CineWeb
         </Link>
         
         <button 
