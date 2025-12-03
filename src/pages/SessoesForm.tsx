@@ -54,12 +54,33 @@ export default function SessoesForm() {
             return;
         }
 
+        const filmeSelecionado = filmes.find(f => f.id === formData.filmeId);
+        
+        if (filmeSelecionado) {
+            const dataSessao = new Date(formData.horario);
+            const inicioFilme = new Date(filmeSelecionado.dataInicioExibicao);
+            const fimFilme = new Date(filmeSelecionado.dataFinalExibicao);
+
+            // Ajuste para garantir que a comparação considere o dia todo (zera as horas do início/fim)
+            // Isso evita bugs de fuso horário ou horas quebradas
+            inicioFilme.setHours(0,0,0,0);
+            fimFilme.setHours(23,59,59,999); // O fim vale até o último segundo do dia
+
+            if (dataSessao < inicioFilme || dataSessao > fimFilme) {
+                setErrors({ 
+                    horario: `O filme só está em cartaz entre ${inicioFilme.toLocaleDateString()} e ${fimFilme.toLocaleDateString()}.` 
+                });
+                setLoading(false);
+                return; // Para tudo! Não envia.
+            }
+        }
+
         try {
             await api.post('/sessoes', validacao.data);
-            alert('Sessão agendada!');
+            alert('Sessão agendada com sucesso!');
             navigate('/sessoes');
         } catch (error) {
-            alert('Erro ao agendar.');
+            alert('Erro ao agendar sessão.');
         } finally {
             setLoading(false);
         }
