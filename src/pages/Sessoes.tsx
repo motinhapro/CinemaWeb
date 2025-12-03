@@ -31,7 +31,7 @@ export default function Sessoes() {
         }
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         if (!confirm('Deseja cancelar esta sessão?')) return;
         try {
             await api.delete(`/sessoes/${id}`);
