@@ -1,0 +1,26 @@
+services:
+  # Serviço do React (Frontend)
+  frontend:
+    build: .
+    container_name: cineweb-front
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app            # Espelha sua pasta local
+      - /app/node_modules # Protege a pasta node_modules do container
+    # Roda o Vite liberando acesso externo (--host)
+    command: npm run dev -- --host
+    environment:
+      - CHOKIDAR_USEPOLLING=true # Essencial para o Windows detectar mudanças nos arquivos
+
+  # Serviço da API simulado (backend)
+  backend:
+    build: .
+    container_name: cineweb-api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./db.json:/app/db.json # Persiste os dados do banco
+      - /app/node_modules
+    # Instala o json-server (se não tiver) e roda
+    command: sh -c "npx json-server --watch db.json --port 3000 --host 0.0.0.0"
