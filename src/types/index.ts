@@ -13,7 +13,7 @@ export const Genero = {
 export type Genero = typeof Genero[keyof typeof Genero];
 
 export interface Filme {
-    id: number; 
+    id: string; 
     titulo: string;
     sinopse: string;
     classificacao: string;
@@ -24,20 +24,20 @@ export interface Filme {
 }
 
 export interface Sala {
-    id: number;
+    id: string;
     numero: number;
     capacidade: number;
 }
 
 export interface Sessao {
-    id: number;
+    id: string;
     filmeId: number; 
     salaId: number;
     horario: string;
 }
 
 export interface Ingresso {
-    id: number;
+    id: string;
     sessaoId: number;
     tipo: 'INTEIRA' | 'MEIA';
     valor: number;

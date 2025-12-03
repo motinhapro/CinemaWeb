@@ -8,6 +8,7 @@ import FilmesForm from './pages/FilmesForm';
 import Salas from './pages/Salas';
 import SalasForm from './pages/SalasForm';
 import Sessoes from './pages/Sessoes';
+import SessoesForm from './pages/SessoesForm';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/salas" element={<Salas />} />
         <Route path="/salas/nova" element={<SalasForm />} />
         <Route path="/sessoes" element={<Sessoes />} />
+        <Route path="/sessoes/nova" element={<SessoesForm />} />
       </Routes>
     </BrowserRouter>
   )

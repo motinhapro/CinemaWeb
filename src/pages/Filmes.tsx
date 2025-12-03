@@ -26,7 +26,7 @@ export default function Filmes() {
         }
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         // Confirmação simples antes de deletar
         if (!confirm('Tem certeza que deseja excluir este filme?')) return;
 

@@ -22,7 +22,7 @@ export default function Salas() {
         }
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         if (!confirm('Deseja realmente excluir esta sala?')) return;
         try {
             await api.delete(`/salas/${id}`);
