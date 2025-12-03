@@ -1,0 +1,17 @@
+{
+  "filmes": [
+    {
+      "id": "bf89",
+      "titulo": "O poderoso chefão",
+      "sinopse": "asdujhisdjnsn vjmkldxjiocfv´dpfg",
+      "classificacao": "10",
+      "duracao": 120,
+      "genero": "Comédia",
+      "dataInicioExibicao": "2025-12-11",
+      "dataFinalExibicao": "2025-12-18"
+    }
+  ],
+  "salas": [],
+  "sessoes": [],
+  "ingressos": []
+}

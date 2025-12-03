@@ -20,7 +20,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./db.json:/app/db.json # Persiste os dados do banco
+      - ./data:/app/data # Persiste os dados do banco
       - /app/node_modules
     # Instala o json-server (se não tiver) e roda
-    command: sh -c "npx json-server --watch db.json --port 3000 --host 0.0.0.0"
+    command: sh -c "npm install json-server && npx json-server data/db.json --port 3000 --host 0.0.0.0"
