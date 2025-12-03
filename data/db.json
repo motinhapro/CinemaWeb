@@ -11,7 +11,13 @@
       "dataFinalExibicao": "2025-12-18"
     }
   ],
-  "salas": [],
+  "salas": [
+    {
+      "id": "7cf0",
+      "numero": 1,
+      "capacidade": 50
+    }
+  ],
   "sessoes": [],
   "ingressos": []
 }
