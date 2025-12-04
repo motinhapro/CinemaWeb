@@ -2,5 +2,7 @@
   "filmes": [],
   "salas": [],
   "sessoes": [],
-  "ingressos": []
+  "ingressos": [],
+  "lanches": [],
+  "pedidos": []  
 }
