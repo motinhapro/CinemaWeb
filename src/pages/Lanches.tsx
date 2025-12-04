@@ -60,6 +60,12 @@ export default function Lanches() {
                                     <p className="card-text text-muted mt-2">{lanche.descricao}</p>
                                 </div>
                                 <div className="card-footer bg-white border-top-0 text-end">
+                                    <Link 
+                                        to={`/lanches/${lanche.id}/editar`} 
+                                        className="btn btn-sm btn-outline-primary"
+                                    >
+                                        <i className="bi bi-pencil"></i>
+                                    </Link>
                                     <button 
                                         className="btn btn-sm btn-outline-danger"
                                         onClick={() => handleDelete(lanche.id)}

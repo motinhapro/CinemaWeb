@@ -15,6 +15,7 @@ import SessaoEditar from './pages/SessoesEditar';
 import VenderIngresso from './pages/VenderIngresso';
 import Lanches from './pages/Lanches';
 import LanchesForm from './pages/LanchesForm';
+import LancheEditar from './pages/LanchesEditar';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path="/salas/:id/editar" element={<SalaEditar />} />
         <Route path="/lanches" element={<Lanches />} />
         <Route path="/lanches/novo" element={<LanchesForm />} />
+        <Route path="/lanches/:id/editar" element={<LancheEditar />} />
       </Routes>
     </BrowserRouter>
   )
