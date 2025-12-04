@@ -59,7 +59,10 @@ export default function Salas() {
                                         Capacidade: <strong>{sala.capacidade}</strong>
                                     </p>
                                 </div>
-                                <div className="card-footer bg-transparent border-top-0">
+                                <div className="card-footer bg-transparent border-top-0 d-flex flex-column gap-2">
+                                    <Link to={`/salas/${sala.id}/editar`} className="btn btn-outline-primary btn-sm w-100">
+                                        <i className="bi bi-pencil"></i> Editar
+                                    </Link>
                                     <button 
                                         className="btn btn-outline-danger btn-sm w-100"
                                         onClick={() => handleDelete(sala.id)}
