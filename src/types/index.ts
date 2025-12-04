@@ -31,8 +31,8 @@ export interface Sala {
 
 export interface Sessao {
     id: string;
-    filmeId: number; 
-    salaId: number;
+    filmeId: string; 
+    salaId: string;
     horario: string;
 }
 

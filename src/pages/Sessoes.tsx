@@ -85,21 +85,29 @@ export default function Sessoes() {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="card-footer bg-white border-top-0 text-end">
+                                <div className="card-footer bg-white border-top-0 d-flex justify-content-end gap-2">
                                     <Link 
                                         to={`/sessoes/${sessao.id}/vender`} 
-                                        className="btn btn-sm btn-success me-2"
+                                        className="btn btn-sm btn-success"
+                                        title="Vender Ingresso"
                                     >
                                         <i className="bi bi-ticket-perforated me-1"></i>
                                         Vender
                                     </Link>
+                                    <Link 
+                                        to={`/sessoes/${sessao.id}/editar`} 
+                                        className="btn btn-sm btn-outline-primary"
+                                        title="Editar Sessão"
+                                    >
+                                        <i className="bi bi-pencil"></i>
+                                    </Link>
                                     <button 
                                         className="btn btn-sm btn-outline-danger"
                                         onClick={() => handleDelete(sessao.id)}
+                                        title="Cancelar Sessão"
                                     >
-                                        Cancelar Sessão
+                                        <i className="bi bi-trash"></i>
                                     </button>
-                                
                                 </div>
                             </div>
                         </div>
