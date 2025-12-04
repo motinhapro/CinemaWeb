@@ -76,7 +76,10 @@ export default function Filmes() {
                                         </li>
                                     </ul>
                                 </div>
-                                <div className="card-footer bg-transparent border-top-0 d-flex justify-content-end">
+                                <div className="card-footer bg-transparent border-top-0 d-flex gap-2 justify-content-end">
+                                    <Link to={`/filmes/${filme.id}/editar`} className="btn btn-outline-primary btn-sm">
+                                        <i className="bi bi-pencil"></i>
+                                    </Link>
                                     <button 
                                         className="btn btn-outline-danger btn-sm"
                                         onClick={() => handleDelete(filme.id)}
