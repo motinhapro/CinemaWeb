@@ -13,6 +13,8 @@ import Sessoes from './pages/Sessoes';
 import SessoesForm from './pages/SessoesForm';
 import SessaoEditar from './pages/SessoesEditar';
 import VenderIngresso from './pages/VenderIngresso';
+import Lanches from './pages/Lanches';
+import LanchesForm from './pages/LanchesForm';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
         <Route path="/sessoes/:sessaoId/vender" element={<VenderIngresso />} />
         <Route path="/sessoes/:id/editar" element={<SessaoEditar />} />
         <Route path="/salas/:id/editar" element={<SalaEditar />} />
+        <Route path="/lanches" element={<Lanches />} />
+        <Route path="/lanches/novo" element={<LanchesForm />} />
       </Routes>
     </BrowserRouter>
   )

@@ -40,6 +40,11 @@ export function Navbar() {
                 Sessões
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className={`nav-link ${isActive('/lanches')}`} to="/lanches">
+                Bomboniere
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

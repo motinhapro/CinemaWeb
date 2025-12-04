@@ -50,3 +50,24 @@ export interface Ingresso {
     valor: number;
     assento: string;
 }
+
+export interface Lanche {
+    id: string;
+    nome: string;
+    descricao: string;
+    valorUnitario: number;
+}
+
+export interface ItemLanchePedido {
+    lancheId: string;
+    quantidade: number;
+    precoNoMomento: number; 
+}
+
+export interface Pedido {
+    id: string;
+    dataCompra: string;
+    valorTotal: number;
+    ingressosIds: string[];
+    itensLanche: ItemLanchePedido[];
+}
