@@ -9,6 +9,7 @@ import Salas from './pages/Salas';
 import SalasForm from './pages/SalasForm';
 import Sessoes from './pages/Sessoes';
 import SessoesForm from './pages/SessoesForm';
+import VenderIngresso from './pages/VenderIngresso';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/salas/nova" element={<SalasForm />} />
         <Route path="/sessoes" element={<Sessoes />} />
         <Route path="/sessoes/nova" element={<SessoesForm />} />
+        <Route path="/sessoes/:sessaoId/vender" element={<VenderIngresso />} />
       </Routes>
     </BrowserRouter>
   )

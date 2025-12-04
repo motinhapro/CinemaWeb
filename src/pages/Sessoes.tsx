@@ -86,12 +86,20 @@ export default function Sessoes() {
                                     </div>
                                 </div>
                                 <div className="card-footer bg-white border-top-0 text-end">
+                                    <Link 
+                                        to={`/sessoes/${sessao.id}/vender`} 
+                                        className="btn btn-sm btn-success me-2"
+                                    >
+                                        <i className="bi bi-ticket-perforated me-1"></i>
+                                        Vender
+                                    </Link>
                                     <button 
                                         className="btn btn-sm btn-outline-danger"
                                         onClick={() => handleDelete(sessao.id)}
                                     >
                                         Cancelar Sessão
                                     </button>
+                                
                                 </div>
                             </div>
                         </div>

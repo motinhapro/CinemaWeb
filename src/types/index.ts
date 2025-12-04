@@ -38,7 +38,14 @@ export interface Sessao {
 
 export interface Ingresso {
     id: string;
-    sessaoId: number;
+    sessaoId: string;
+    tipo: 'INTEIRA' | 'MEIA';
+    valor: number;
+}
+
+export interface Ingresso {
+    id: string;
+    sessaoId: string;
     tipo: 'INTEIRA' | 'MEIA';
     valor: number;
 }
