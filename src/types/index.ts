@@ -48,4 +48,5 @@ export interface Ingresso {
     sessaoId: string;
     tipo: 'INTEIRA' | 'MEIA';
     valor: number;
+    assento: string;
 }

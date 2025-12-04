@@ -16,37 +16,25 @@ export default function VenderIngresso() {
     const [tipoIngresso, setTipoIngresso] = useState<'INTEIRA' | 'MEIA'>('INTEIRA');
     const [loading, setLoading] = useState(true);
     
-    // Novos estados para controle de capacidade
+    // Controle de Assentos
     const [ingressosVendidos, setIngressosVendidos] = useState<Ingresso[]>([]);
-    const [assentosRestantes, setAssentosRestantes] = useState(0);
+    const [assentoSelecionado, setAssentoSelecionado] = useState<string>('');
 
     const PRECO_BASE = 20.0;
+    const COLUNAS_POR_FILA = 8; // Define a largura da sala visualmente
 
     useEffect(() => {
-        if (sessaoId) {
-            carregarDados();
-        }
+        if (sessaoId) carregarDados();
     }, [sessaoId]);
 
     const carregarDados = async () => {
         try {
-            // Buscamos a SESSÃO (com sala e filme) e os INGRESSOS já vendidos para ela
             const [respSessao, respIngressos] = await Promise.all([
                 api.get<SessaoDetalhada>(`/sessoes/${sessaoId}?_expand=filme&_expand=sala`),
                 api.get<Ingresso[]>(`/ingressos?sessaoId=${sessaoId}`)
             ]);
-
-            const sessaoAtual = respSessao.data;
-            const vendidos = respIngressos.data;
-
-            setSessao(sessaoAtual);
-            setIngressosVendidos(vendidos);
-
-            // Cálculo Matemático: Capacidade - Vendidos
-            if (sessaoAtual.sala) {
-                setAssentosRestantes(sessaoAtual.sala.capacidade - vendidos.length);
-            }
-
+            setSessao(respSessao.data);
+            setIngressosVendidos(respIngressos.data);
         } catch (error) {
             alert('Erro ao carregar dados.');
             navigate('/sessoes');
@@ -56,21 +44,21 @@ export default function VenderIngresso() {
     };
 
     const valorFinal = tipoIngresso === 'MEIA' ? PRECO_BASE / 2 : PRECO_BASE;
-    const sessaoEsgotada = assentosRestantes <= 0;
 
     const handleVenda = async () => {
-        if (!sessao || sessaoEsgotada) return;
+        if (!sessao || !assentoSelecionado) return;
         setLoading(true);
 
         const novoIngresso = {
             sessaoId: sessao.id,
             tipo: tipoIngresso,
-            valor: valorFinal
+            valor: valorFinal,
+            assento: assentoSelecionado
         };
 
         try {
             await api.post('/ingressos', novoIngresso);
-            alert(`Venda realizada!\nAssentos restantes: ${assentosRestantes - 1}`);
+            alert(`Venda confirmada para o assento ${assentoSelecionado}!`);
             navigate('/sessoes');
         } catch (error) {
             alert('Erro ao realizar venda.');
@@ -79,113 +67,144 @@ export default function VenderIngresso() {
         }
     };
 
+    // Função para gerar o Grid de Assentos
+    const renderizarMapaSala = () => {
+        if (!sessao?.sala) return null;
+
+        const totalAssentos = sessao.sala.capacidade;
+        const assentos = [];
+        
+        // Pega todos os códigos de assentos já vendidos (Ex: ["A-1", "B-3"])
+        const assentosOcupados = ingressosVendidos.map(i => i.assento);
+
+        // Gera as cadeiras
+        for (let i = 0; i < totalAssentos; i++) {
+            const filaLetra = String.fromCharCode(65 + Math.floor(i / COLUNAS_POR_FILA)); // A, B, C...
+            const numeroCadeira = (i % COLUNAS_POR_FILA) + 1; // 1, 2, 3...
+            const codigoAssento = `${filaLetra}-${numeroCadeira}`;
+
+            const ocupado = assentosOcupados.includes(codigoAssento);
+            const selecionado = assentoSelecionado === codigoAssento;
+
+            let classeBtn = "btn-outline-secondary"; // Livre
+            if (ocupado) classeBtn = "btn-danger disabled"; // Vendido
+            else if (selecionado) classeBtn = "btn-primary"; // Selecionado
+
+            assentos.push(
+                <button
+                    key={codigoAssento}
+                    type="button"
+                    className={`btn btn-sm m-1 ${classeBtn}`}
+                    style={{ width: '50px' }}
+                    onClick={() => !ocupado && setAssentoSelecionado(codigoAssento)}
+                    disabled={ocupado}
+                >
+                    {codigoAssento}
+                </button>
+            );
+        }
+
+        return (
+            <div className="d-flex flex-wrap justify-content-center" style={{ maxWidth: '500px', margin: '0 auto' }}>
+                <div className="w-100 text-center mb-2 bg-secondary text-white small py-1 rounded">TELA</div>
+                {assentos}
+            </div>
+        );
+    };
+
     if (loading) return <div className="container mt-4">Carregando...</div>;
     if (!sessao) return <div className="container mt-4">Sessão não encontrada.</div>;
 
-    // Cálculo para a barra de progresso (porcentagem de ocupação)
-    const ocupacao = sessao.sala ? ((sessao.sala.capacidade - assentosRestantes) / sessao.sala.capacidade) * 100 : 0;
-
     return (
         <div className="container mt-4">
-            <h2>Venda de Ingresso</h2>
+            <h2>Selecionar Assento</h2>
             
-            <div className="card shadow-sm mt-3">
-                <div className="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                    <h5 className="mb-0">Resumo da Sessão</h5>
-                    {sessaoEsgotada && <span className="badge bg-danger">ESGOTADO</span>}
-                </div>
-                <div className="card-body">
-                    <div className="row">
-                        <div className="col-md-8">
-                            <h3 className="card-title text-primary fw-bold">{sessao.filme?.titulo}</h3>
-                            <ul className="list-group list-group-flush mt-3">
-                                <li className="list-group-item">
-                                    <i className="bi bi-geo-alt-fill me-2"></i> 
-                                    Sala {sessao.sala?.numero}
-                                </li>
-                                <li className="list-group-item">
-                                    <i className="bi bi-calendar-event me-2"></i> 
-                                    {new Date(sessao.horario).toLocaleString('pt-BR')}
-                                </li>
-                            </ul>
+            <div className="row mt-3">
+                {/* Coluna da Esquerda: Mapa da Sala */}
+                <div className="col-lg-7 mb-4">
+                    <div className="card shadow-sm h-100">
+                        <div className="card-header bg-light fw-bold text-center">
+                            Mapa da Sala {sessao.sala.numero}
                         </div>
-                        
-                        {/* Painel de Lotação */}
-                        <div className="col-md-4 bg-light p-3 rounded border">
-                            <h6 className="fw-bold text-center">Lotação da Sala</h6>
-                            <div className="progress mb-2" style={{ height: '20px' }}>
-                                <div 
-                                    className={`progress-bar ${sessaoEsgotada ? 'bg-danger' : 'bg-success'}`} 
-                                    role="progressbar" 
-                                    style={{ width: `${ocupacao}%` }}
-                                >
-                                    {Math.round(ocupacao)}%
-                                </div>
-                            </div>
-                            <div className="d-flex justify-content-between small fw-bold">
-                                <span>Vendidos: {ingressosVendidos.length}</span>
-                                <span>Total: {sessao.sala?.capacidade}</span>
-                            </div>
-                            <div className="text-center mt-2">
-                                {sessaoEsgotada ? (
-                                    <span className="text-danger fw-bold">Não há mais assentos!</span>
-                                ) : (
-                                    <span className="text-success fw-bold">{assentosRestantes} assentos livres</span>
-                                )}
-                            </div>
+                        <div className="card-body bg-light d-flex align-items-center justify-content-center">
+                            {renderizarMapaSala()}
+                        </div>
+                        <div className="card-footer text-center small text-muted">
+                            <span className="me-3"><i className="bi bi-square-fill text-secondary"></i> Livre</span>
+                            <span className="me-3"><i className="bi bi-square-fill text-danger"></i> Ocupado</span>
+                            <span><i className="bi bi-square-fill text-primary"></i> Selecionado</span>
                         </div>
                     </div>
+                </div>
 
-                    <hr className="my-4" />
+                {/* Coluna da Direita: Detalhes e Pagamento */}
+                <div className="col-lg-5">
+                    <div className="card shadow-sm">
+                        <div className="card-header bg-dark text-white">
+                            <h5 className="mb-0">Resumo do Pedido</h5>
+                        </div>
+                        <div className="card-body">
+                            <h4 className="card-title text-primary fw-bold">{sessao.filme?.titulo}</h4>
+                            <p className="text-muted mb-4">
+                                {new Date(sessao.horario).toLocaleString('pt-BR')}
+                            </p>
 
-                    {!sessaoEsgotada && (
-                        <div className="mb-3">
-                            <label className="form-label fw-bold d-block">Tipo de Ingresso:</label>
-                            
-                            <div className="form-check form-check-inline">
-                                <input 
-                                    className="form-check-input" 
-                                    type="radio" 
-                                    name="tipoIngresso" 
-                                    id="inteira" 
-                                    checked={tipoIngresso === 'INTEIRA'}
-                                    onChange={() => setTipoIngresso('INTEIRA')}
-                                />
-                                <label className="form-check-label" htmlFor="inteira">Inteira (R$ {PRECO_BASE.toFixed(2)})</label>
+                            <div className="mb-3">
+                                <label className="form-label fw-bold">Assento Selecionado:</label>
+                                <div className="form-control form-control-lg text-center fw-bold bg-light">
+                                    {assentoSelecionado || <span className="text-muted small">Selecione no mapa</span>}
+                                </div>
                             </div>
-                            
-                            <div className="form-check form-check-inline">
-                                <input 
-                                    className="form-check-input" 
-                                    type="radio" 
-                                    name="tipoIngresso" 
-                                    id="meia" 
-                                    checked={tipoIngresso === 'MEIA'}
-                                    onChange={() => setTipoIngresso('MEIA')}
-                                />
-                                <label className="form-check-label" htmlFor="meia">Meia-Entrada (R$ {(PRECO_BASE/2).toFixed(2)})</label>
+
+                            <hr />
+
+                            <div className="mb-3">
+                                <label className="form-label fw-bold d-block">Tipo de Ingresso:</label>
+                                <div className="btn-group w-100" role="group">
+                                    <input 
+                                        type="radio" 
+                                        className="btn-check" 
+                                        name="btnradio" 
+                                        id="btn-inteira" 
+                                        autoComplete="off" 
+                                        checked={tipoIngresso === 'INTEIRA'}
+                                        onChange={() => setTipoIngresso('INTEIRA')}
+                                    />
+                                    <label className="btn btn-outline-primary" htmlFor="btn-inteira">Inteira (R$ {PRECO_BASE})</label>
+
+                                    <input 
+                                        type="radio" 
+                                        className="btn-check" 
+                                        name="btnradio" 
+                                        id="btn-meia" 
+                                        autoComplete="off" 
+                                        checked={tipoIngresso === 'MEIA'}
+                                        onChange={() => setTipoIngresso('MEIA')}
+                                    />
+                                    <label className="btn btn-outline-primary" htmlFor="btn-meia">Meia (R$ {PRECO_BASE/2})</label>
+                                </div>
                             </div>
-                            
-                            <div className="alert alert-success text-center fw-bold mt-3">
-                                Valor Final: R$ {valorFinal.toFixed(2)}
+
+                            <div className="alert alert-success text-center fw-bold fs-5 mt-4">
+                                Total: R$ {valorFinal.toFixed(2)}
+                            </div>
+
+                            <div className="d-grid gap-2 mt-4">
+                                <button 
+                                    className="btn btn-success btn-lg" 
+                                    onClick={handleVenda}
+                                    disabled={loading || !assentoSelecionado}
+                                >
+                                    {loading ? 'Processando...' : 'Confirmar e Imprimir'}
+                                </button>
+                                <button 
+                                    className="btn btn-outline-secondary" 
+                                    onClick={() => navigate('/sessoes')}
+                                >
+                                    Cancelar
+                                </button>
                             </div>
                         </div>
-                    )}
-
-                    <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button 
-                            className="btn btn-secondary me-md-2" 
-                            onClick={() => navigate('/sessoes')}
-                        >
-                            Voltar
-                        </button>
-                        <button 
-                            className="btn btn-success px-5" 
-                            onClick={handleVenda}
-                            disabled={loading || sessaoEsgotada}
-                        >
-                            {loading ? 'Processando...' : sessaoEsgotada ? 'Esgotado' : 'Confirmar Venda'}
-                        </button>
                     </div>
                 </div>
             </div>
