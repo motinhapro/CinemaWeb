@@ -1,73 +1,97 @@
-# React + TypeScript + Vite
+# 🎬 CineWeb - Sistema de Gerenciamento de Cinema
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Projeto desenvolvido para a disciplina de Laboratório de Desenvolvimento Web.
 
-Currently, two official plugins are available:
+O **CineWeb** é uma aplicação completa para administração de cinemas e venda de ingressos. O sistema permite o gerenciamento de filmes, salas e sessões, além de simular um fluxo de venda de ingressos com mapa de assentos interativo e bomboniere.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Tecnologias Utilizadas
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+O projeto foi construído utilizando as melhores práticas de desenvolvimento web moderno:
 
-## Expanding the ESLint configuration
+* **Frontend:** React + Vite
+* **Linguagem:** TypeScript
+* **Estilização:** Bootstrap 5 + Bootstrap Icons
+* **Validação:** Zod (Schemas robustos)
+* **Rotas:** React Router DOM
+* **Backend:** Json-Server (v0.17.4)
+* **Infraestrutura:** Docker & Docker Compose
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ✨ Funcionalidades
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 🎥 Filmes e Salas
+* **CRUD Completo:** Cadastro, Edição, Listagem e Exclusão de Filmes e Salas.
+* **Validação:** Regras para datas, classificação indicativa e capacidade das salas.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 📅 Sessões (Agendamento)
+* **Cruzamento de Dados:** Seleção de Filme e Sala integrados.
+* **Regras de Negócio:** Validação de janela de exibição (filme precisa estar em cartaz) e datas retroativas.
+* **Visualização:** Listagem com dados expandidos (Nome do Filme e Número da Sala).
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 🍿 Bomboniere
+* **Catálogo:** Gerenciamento de Combos e Lanches.
+* **Venda:** Integração dos lanches no carrinho de compras.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 🎟️ Venda de Ingressos
+* **Mapa Interativo:** Visualização gráfica dos assentos baseada na capacidade da sala.
+* **Controle de Lotação:** Assentos vendidos ficam bloqueados automaticamente.
+* **Carrinho:** Cálculo automático de Inteira/Meia e soma dos lanches.
+* **Pedido:** Geração de registro completo vinculando Ingresso + Assento + Lanches.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+## 📦 Como Rodar o Projeto
+
+A maneira recomendada é utilizando **Docker** para garantir o ambiente correto.
+
+### Pré-requisitos
+* Docker e Docker Compose instalados.
+
+### Passo a Passo
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/seu-usuario/cineweb.git](https://github.com/seu-usuario/cineweb.git)
+    cd cineweb
+    ```
+
+2.  **Suba os containers:**
+    ```bash
+    docker-compose up --build
+    ```
+
+3.  **Acesse a aplicação:**
+    * **Frontend:** http://localhost:5173
+    * **Backend:** http://localhost:3000
+
+---
+
+## 🔧 Estrutura do Projeto
+
+O código segue padrões de arquitetura limpa:
+
+* **data/**: Contém o `db.json` (Banco de dados).
+* **src/components/**: Componentes globais (ex: Navbar).
+* **src/models/**: Schemas de validação Zod.
+* **src/pages/**: Telas da aplicação (Filmes, Salas, Vendas, etc.).
+* **src/services/**: Configuração da API (Axios).
+* **src/types/**: Interfaces TypeScript globais.
+* **docker-compose.yml**: Orquestração dos containers.
+
+---
+
+## 🧪 Notas Técnicas
+
+1.  **Docker no Windows:** Utilizamos volumes mapeados para evitar erros de permissão (`EBUSY`) no Json-Server.
+2.  **Json-Server:** Versão fixa em `0.17.4` para garantir funcionamento correto dos relacionamentos (`_expand`).
+3.  **Assentos Dinâmicos:** O mapa da sala é renderizado matematicamente com base na capacidade cadastrada.
+
+---
+
+## ✒️ Autor
+
+Desenvolvido por **[Seu Nome]**
+*Estudante de Engenharia de Software*
