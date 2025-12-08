@@ -54,7 +54,7 @@ A maneira recomendada é utilizando **Docker** para garantir o ambiente correto.
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/motinhapro/CinemaWeb]
+    git clone [https://github.com/motinhapro/CinemaWeb](https://github.com/motinhapro/CinemaWeb)
     cd cineweb
     ```
 
@@ -88,5 +88,3 @@ O código segue padrões de arquitetura limpa:
 1.  **Docker no Windows:** Utilizamos volumes mapeados para evitar erros de permissão (`EBUSY`) no Json-Server.
 2.  **Json-Server:** Versão fixa em `0.17.4` para garantir funcionamento correto dos relacionamentos (`_expand`).
 3.  **Assentos Dinâmicos:** O mapa da sala é renderizado matematicamente com base na capacidade cadastrada.
-
----
