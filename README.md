@@ -54,7 +54,7 @@ A maneira recomendada é utilizando **Docker** para garantir o ambiente correto.
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/seu-usuario/cineweb.git](https://github.com/seu-usuario/cineweb.git)
+    git clone [https://github.com/motinhapro/CinemaWeb]
     cd cineweb
     ```
 
@@ -90,8 +90,3 @@ O código segue padrões de arquitetura limpa:
 3.  **Assentos Dinâmicos:** O mapa da sala é renderizado matematicamente com base na capacidade cadastrada.
 
 ---
-
-## ✒️ Autor
-
-Desenvolvido por **[Seu Nome]**
-*Estudante de Engenharia de Software*
