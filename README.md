@@ -88,10 +88,3 @@ O código segue padrões de arquitetura limpa:
 1.  **Docker no Windows:** Utilizamos volumes mapeados para evitar erros de permissão (`EBUSY`) no Json-Server.
 2.  **Json-Server:** Versão fixa em `0.17.4` para garantir funcionamento correto dos relacionamentos (`_expand`).
 3.  **Assentos Dinâmicos:** O mapa da sala é renderizado matematicamente com base na capacidade cadastrada.
-
----
-
-## ✒️ Autor
-
-Desenvolvido por **[Seu Nome]**
-*Estudante de Engenharia de Software*
