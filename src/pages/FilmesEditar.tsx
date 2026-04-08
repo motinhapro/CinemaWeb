@@ -70,7 +70,7 @@ export default function FilmeEditar() {
         }
 
         try {
-            await api.put(`/filmes/${id}`, validacao.data);
+            await api.patch(`/filmes/${id}`, validacao.data);
             alert('Filme atualizado com sucesso!');
             navigate('/filmes');
         } catch (error) {

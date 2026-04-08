@@ -24,11 +24,12 @@ export default function Salas() {
 
     const handleDelete = async (id: string) => {
         if (!confirm('Deseja realmente excluir esta sala?')) return;
+
         try {
             await api.delete(`/salas/${id}`);
             setSalas(salas.filter(s => s.id !== id));
-        } catch (error) {
-            alert('Erro ao excluir sala.');
+        } catch (error: any) {
+            alert(error.response?.data?.message || 'Erro ao excluir sala.');
         }
     };
 

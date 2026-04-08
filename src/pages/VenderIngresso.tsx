@@ -38,9 +38,9 @@ export default function VenderIngresso() {
     const carregarDados = async () => {
         try {
             const [respSessao, respIngressos, respLanches] = await Promise.all([
-                api.get<SessaoDetalhada>(`/sessoes/${sessaoId}?_expand=filme&_expand=sala`),
+                api.get<SessaoDetalhada>(`/sessoes/${sessaoId}`),
                 api.get<Ingresso[]>(`/ingressos?sessaoId=${sessaoId}`),
-                api.get<Lanche[]>('/lanches')
+                api.get<Lanche[]>('/lanche-combo')
             ]);
             setSessao(respSessao.data);
             setIngressosVendidos(respIngressos.data);
@@ -88,7 +88,7 @@ export default function VenderIngresso() {
         try {
             // Passo 1: Criar o Ingresso (Reserva o assento)
             const novoIngresso = {
-                sessaoId: sessao.id,
+                sessaoId: Number(sessao.id), // 🔥
                 tipo: tipoIngresso,
                 valor: valorIngresso,
                 assento: assentoSelecionado
@@ -96,11 +96,13 @@ export default function VenderIngresso() {
             const respIngresso = await api.post<Ingresso>('/ingressos', novoIngresso);
             const ingressoCriado = respIngresso.data;
 
+            setIngressosVendidos(prev => [...prev, ingressoCriado]);
+
             // Passo 2: Preparar os itens do lanche para o Pedido
             const itensLanche = Object.entries(carrinhoLanches).map(([id, qtd]) => {
                 const lanche = lanchesDisponiveis.find(l => l.id === id);
                 return {
-                    lancheId: id,
+                    lancheId: Number(id), // 🔥
                     quantidade: qtd,
                     precoNoMomento: lanche ? lanche.valorUnitario : 0
                 };
@@ -110,7 +112,7 @@ export default function VenderIngresso() {
             const novoPedido = {
                 dataCompra: new Date().toISOString(),
                 valorTotal: valorTotalPedido,
-                ingressosIds: [ingressoCriado.id], // Array conforme UML
+                ingressosIds: [Number(ingressoCriado.id)], // 🔥
                 itensLanche: itensLanche
             };
 
@@ -132,12 +134,14 @@ export default function VenderIngresso() {
         if (!sessao?.sala) return null;
         const totalAssentos = sessao.sala.capacidade;
         const assentos = [];
-        const assentosOcupados = ingressosVendidos.map(i => i.assento);
+        const assentosOcupados = ingressosVendidos
+            .map(i => i.assento?.trim().toUpperCase())
+            .filter(Boolean);
 
         for (let i = 0; i < totalAssentos; i++) {
             const filaLetra = String.fromCharCode(65 + Math.floor(i / COLUNAS_POR_FILA));
             const numeroCadeira = (i % COLUNAS_POR_FILA) + 1;
-            const codigoAssento = `${filaLetra}-${numeroCadeira}`;
+            const codigoAssento = `${filaLetra}-${numeroCadeira}`.trim().toUpperCase();
             const ocupado = assentosOcupados.includes(codigoAssento);
             const selecionado = assentoSelecionado === codigoAssento;
 

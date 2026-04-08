@@ -23,7 +23,7 @@ export default function LancheEditar() {
 
     const carregarLanche = async () => {
         try {
-            const response = await api.get<Lanche>(`/lanches/${id}`);
+            const response = await api.get<Lanche>(`/lanche-combo/${id}`);
             const lanche = response.data;
             setFormData({
                 nome: lanche.nome,
@@ -61,12 +61,12 @@ export default function LancheEditar() {
         }
 
         try {
-            await api.put(`/lanches/${id}`, validacao.data);
+            await api.patch(`/lanche-combo/${id}`, validacao.data); // 🔥 PATCH
             alert('Combo atualizado com sucesso!');
             navigate('/lanches');
-        } catch (error) {
+            } catch (error) {
             alert('Erro ao atualizar combo.');
-        } finally {
+            } finally {
             setLoading(false);
         }
     };

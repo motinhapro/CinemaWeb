@@ -38,7 +38,7 @@ export default function LanchesForm() {
         }
 
         try {
-            await api.post('/lanches', validacao.data);
+            await api.post('/lanche-combo', validacao.data);
             alert('Combo cadastrado com sucesso!');
             navigate('/lanches');
         } catch (error) {

@@ -79,7 +79,8 @@ export default function SessoesForm() {
             await api.post('/sessoes', validacao.data);
             alert('Sessão agendada com sucesso!');
             navigate('/sessoes');
-        } catch (error) {
+        } catch (error: any) {
+            console.log(error.response?.data);
             alert('Erro ao agendar sessão.');
         } finally {
             setLoading(false);

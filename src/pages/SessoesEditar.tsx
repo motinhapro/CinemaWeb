@@ -94,12 +94,12 @@ export default function SessaoEditar() {
 
         // 3. Envio (PUT)
         try {
-            await api.put(`/sessoes/${id}`, validacao.data);
+            await api.patch(`/sessoes/${id}`, validacao.data); // 🔥 PATCH
             alert('Sessão atualizada com sucesso!');
             navigate('/sessoes');
-        } catch (error) {
+            } catch (error) {
             alert('Erro ao atualizar sessão.');
-        } finally {
+            } finally {
             setLoading(false);
         }
     };

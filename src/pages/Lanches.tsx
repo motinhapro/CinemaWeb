@@ -13,7 +13,7 @@ export default function Lanches() {
 
     const carregarLanches = async () => {
         try {
-            const response = await api.get<Lanche[]>('/lanches');
+            const response = await api.get<Lanche[]>('/lanche-combo');
             setLanches(response.data);
         } catch (error) {
             alert('Erro ao carregar lanches.');
@@ -24,11 +24,12 @@ export default function Lanches() {
 
     const handleDelete = async (id: string) => {
         if (!confirm('Excluir este combo?')) return;
+
         try {
-            await api.delete(`/lanches/${id}`);
+            await api.delete(`/lanche-combo/${id}`);
             setLanches(lanches.filter(l => l.id !== id));
-        } catch (error) {
-            alert('Erro ao excluir.');
+        } catch (error: any) {
+            alert(error.response?.data?.message || 'Erro ao excluir.');
         }
     };
 

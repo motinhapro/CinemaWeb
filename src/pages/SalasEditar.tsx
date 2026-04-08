@@ -51,12 +51,12 @@ export default function SalaEditar() {
         }
 
         try {
-            await api.put(`/salas/${id}`, validacao.data);
+            await api.patch(`/salas/${id}`, validacao.data); // 🔥 PATCH
             alert('Sala atualizada com sucesso!');
             navigate('/salas');
-        } catch (error) {
+            } catch (error) {
             alert('Erro ao atualizar sala.');
-        } finally {
+            } finally {
             setLoading(false);
         }
     };

@@ -33,11 +33,12 @@ export default function Sessoes() {
 
     const handleDelete = async (id: string) => {
         if (!confirm('Deseja cancelar esta sessão?')) return;
+
         try {
             await api.delete(`/sessoes/${id}`);
             setSessoes(sessoes.filter(s => s.id !== id));
-        } catch (error) {
-            alert('Erro ao excluir sessão.');
+        } catch (error: any) {
+            alert(error.response?.data?.message || 'Erro ao excluir sessão.');
         }
     };
 
